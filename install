@@ -1,0 +1,32 @@
+#!/bin/bash
+set -e
+
+if [ ! -d ~/bin ]
+then
+    echo "The bin directory does not exist"
+    exit -1
+fi
+
+if [ "$1" == "-u" ]
+then
+    uninstall=yes
+fi
+
+for f in *
+do
+    base=$(basename $f)
+    if [[ "$base" == "$(basename $0)" || "$base" == "README.md" || "$base" == "README.html" ]]
+    then
+        continue
+    fi
+    if [[ "$uninstall" == "yes" ]]
+    then
+        if [ -L ~/bin/$base ]
+        then
+            rm ~/bin/$base
+        fi
+    else
+        ln -s $PWD/$f ~/bin/
+    fi
+done
+
